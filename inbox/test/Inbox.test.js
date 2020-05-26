@@ -1,5 +1,5 @@
 /* --- Module for unit testing using mocha --- */
-const assert = require('assert'); 
+const assert = require('assert');
 
 /* --- Module for implementation of local ethereum test network using ganache --- */
 const ganache = require('ganache-cli');
@@ -8,7 +8,9 @@ const ganache = require('ganache-cli');
 const Web3 = require('web3');
 
 /* --- Get ABI and Bytecode from compiled Solidity contract --- */
-const { interface, bytecode } = require('../compile');
+const contract = require('../compile');
+
+const { abi, bytecode } = require('../compile');
 
 /* --- Initiating web3 --- */
 const web3 = new Web3(ganache.provider());
@@ -21,9 +23,11 @@ beforeEach(async () =>  {
     accounts = await web3.eth.getAccounts();
 
     /* Deploy contract */
-    inbox = await new web3.eth.contract(JSON.parse(interface))
-        .deploy({ data: bytecode, arguments: ['Hello'] })
-        .send({ from: accounts[0], gas: '1000000' })
+    inbox = await new web3.eth.Contract(abi)
+      .deploy({ data: bytecode, arguments: ['Hi There'] })
+      .send({ from: accounts[0], gas: '1000000' })
+
+
 });
 
 describe('Inbox', () => {

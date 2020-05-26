@@ -24,12 +24,16 @@ const sol_json_input = {
     },
     settings: {
         outputSelection: {
-            '*': {
+            'Inbox.sol': {
                 'Inbox': [ "abi", "evm.bytecode" ] // selecting "inbox" contract, and only output abi and bytecode
             }
         }
     }
 }
 
+const contract = JSON.parse(solc.compile(JSON.stringify(sol_json_input)));
+const abi = contract.contracts["Inbox.sol"].Inbox.abi;
+const bytecode = contract.contracts["Inbox.sol"].Inbox.evm.bytecode.object;
+
 /* --- Exporting JSON Object --- */
-module.exports = JSON.parse(solc.compile(JSON.stringify(sol_json_input)));
+module.exports = { abi, bytecode };
