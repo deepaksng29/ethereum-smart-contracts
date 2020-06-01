@@ -4,13 +4,15 @@
   "description": "simple lottery ethereum program operated on the blockchain using a smart contract",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Deepak Singh",
   "license": "ISC",
   "dependencies": {
+    "ganache-cli": "^6.9.1",
     "mocha": "^7.2.0",
     "solc": "^0.6.8",
+    "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.2.8"
   }
 }
