@@ -2,14 +2,18 @@
 pragma solidity ^0.6.8;
 
 contract Lottery {
-    address private manager;
-    address[] private players;
+    address public manager;
+    address[] public players;
 
     constructor() public {
         manager = msg.sender;
     }
 
-    function GetManager() public view returns (address) {
-        return manager;
+    function enter() public payable {
+        require(
+            msg.value > 1 ether,
+            "Insufficient amount of Ether"
+        );
+        players.push(msg.sender);
     }
 }
