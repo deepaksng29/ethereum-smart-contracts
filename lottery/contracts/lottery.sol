@@ -29,7 +29,7 @@ contract Lottery {
     }
     
     modifier restricted() {
-        require(msg.sender == manager);
+        require(msg.sender == manager, "Permission denied. Only the manager can run this operation.");
         _;
     }
     
