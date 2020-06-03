@@ -132,4 +132,25 @@ describe("Lottery Contract", () => {
         assert(players.length == 0);
     });
 
+    it("Lottery balance is reset after picking a winner", async () => {
+        await lottery.methods.enter().send({
+            from: accounts[0],
+            value: web3.utils.toWei("2", "ether")
+        });
+
+        await lottery.methods.enter().send({
+            from: accounts[2],
+            value: web3.utils.toWei("2.4", "ether")
+        });
+
+        let balance = await web3.eth.getBalance(lottery.options.address);
+
+        await lottery.methods.pickWinner().send({
+            from: accounts[0]
+        });
+
+        balance = await web3.eth.getBalance(lottery.options.address);
+        
+        assert(balance == 0);
+    });
 });
