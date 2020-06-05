@@ -18,7 +18,7 @@ const deploy = async () => {
     console.log("Deploying contract from account: " + accounts[0]);
     const result = await new web3.eth.Contract(abi) // initiating new contract
         .deploy({ data: "0x" + bytecode })
-        .send({ from: acccounts[0] })
+        .send({ from: accounts[0] })
     console.log("Contract deployed at: " + result.options.address);
 }
 
