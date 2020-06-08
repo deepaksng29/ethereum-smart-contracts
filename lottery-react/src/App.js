@@ -48,24 +48,38 @@ class App extends Component {
   /* ---- Rendering the component using JSX ---- */
   render() {
     return (
-      <div>
-        <h2>Lottery Contract</h2>      
-        <p>
-          This contract is managed by { this.state.manager }! <br />
-          There are currently { this.state.players.length } players competing to win { web3.utils.fromWei(this.state.balance, "ether") } ETH!
-        </p>
+      <div className = "container">
+        <div className = "jumbotron">
+          <h2>Lottery Contract</h2>      
+          <p>
+            This contract is managed by { this.state.manager }! <br />
+            There are currently { this.state.players.length } players competing to win { web3.utils.fromWei(this.state.balance, "ether") } ETH!
+          </p>
+        </div>
         <hr />
-        <form onSubmit = { this.onSubmit }>
-          <h4>Want to try your luck?</h4>
-          <div>
-            <label>Amount of ETH to enter: </label>
-            <input
-              onChange = { event => this.setState({ value: event.target.value }) } />
+        <div className = "jumbotron">
+          <form onSubmit = { this.onSubmit }>
+            <div className = "row">
+              <h4>Want to try your luck?</h4>
+            </div>
+            <div className = "row">
+              <div className = "col">
+                <label>Amount of ETH to enter: </label>
+              </div>
+              <div className = "col">
+                <input
+                  onChange = { event => this.setState({ value: event.target.value }) } />
+              </div>
+            </div>
+            <div className = "row center">
+              <button>Enter</button>
+            </div>
+          </form>
+          <hr />
+          <div className = "alert alert-danger alert-dismissible">
+            <p>{ this.state.message }</p>
           </div>
-          <button>Enter</button>
-        </form>
-        <hr />
-        <p>{ this.state.message }</p>
+        </div>
       </div>
     )
   }
