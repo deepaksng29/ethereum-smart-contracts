@@ -23,7 +23,6 @@ class App extends Component {
     this.setState( { manager, players, balance, message: "" } );
   }
 
-  
   /* ---- Event handling for entering lottery ---- */
   onSubmit = async (event) => {
     try {
