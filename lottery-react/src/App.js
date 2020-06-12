@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import web3 from "./web3";
 import lotteryContract from "./lottery";
-import lottery from './lottery';
 
 class App extends Component {
   /* ---- Initialisation of the state of the main component ---- */
@@ -27,13 +26,13 @@ class App extends Component {
   
   /* ---- Event handling for entering lottery ---- */
   onSubmit = async (event) => {
-    try{
+    try {
       this.setState({ message: "Entering you in the competition..." });
       event.preventDefault();
   
       const accounts = await web3.eth.getAccounts();
       
-      await lottery.methods.enter().send({
+      await lotteryContract.methods.enter().send({
         from: accounts[0],
         value: web3.utils.toWei(this.state.value, "ether")
       });
@@ -42,6 +41,23 @@ class App extends Component {
       this.componentDidMount();
     } catch (e) {
       this.setState({ message: "Transaction failed." });
+    }
+  }
+
+  onClick = async (event) => {
+    try {
+      this.setState({ message: "Picking a winner..." });
+      
+      const accounts = await web3.eth.getAccounts();
+
+      await lotteryContract.methods.pickWinner().send({
+        from: accounts[0]
+      });
+
+      this.setState({ message: "A winner has been picked! "});
+
+    } catch (e) {
+      this.setState({ message: "Operation failed. "});
     }
   }
 
@@ -79,6 +95,12 @@ class App extends Component {
           <div className = "alert alert-danger alert-dismissible">
             <p>{ this.state.message }</p>
           </div>
+          <hr />
+          <div className = "row center">
+            <h4>Ready to pick a winner?</h4> 
+            <button onClick = { this.onClick }>Pick a winner!</button>
+          </div>
+          <hr />
         </div>
       </div>
     )
