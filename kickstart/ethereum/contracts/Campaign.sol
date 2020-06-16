@@ -18,7 +18,6 @@ contract CampaignFactory {
     }
 }
 
-
 /* --- Campaign contract --- */
 contract Campaign {
     /* ---- Struct storing a request for approval for funds transfer ---- */
