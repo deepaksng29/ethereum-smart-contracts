@@ -23,6 +23,7 @@ class App extends Component {
     this.setState( { manager, players, balance, message: "" } );
   }
 
+  
   /* ---- Event handling for entering lottery ---- */
   onSubmit = async (event) => {
     try {
@@ -54,7 +55,7 @@ class App extends Component {
       });
 
       this.setState({ message: "A winner has been picked! "});
-
+      this.componentDidMount();
     } catch (e) {
       this.setState({ message: "Operation failed. "});
     }
@@ -96,8 +97,8 @@ class App extends Component {
           </div>
           <hr />
           <div className = "row center">
-            <h4>Ready to pick a winner?</h4> 
-            <button onClick = { this.onClick }>Pick a winner!</button>
+            <h4 className = "row">Ready to pick a winner?</h4>  <br />
+            <button className = "row" onClick = { this.onClick }>Pick a winner!</button>
           </div>
           <hr />
         </div>
