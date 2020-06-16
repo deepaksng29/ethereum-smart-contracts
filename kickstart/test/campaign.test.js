@@ -70,7 +70,7 @@ describe("Campaigns", () => {
 
     it("Allows people to contribute money and marks them as contributors", async () => {
         let areContributors = true;
-        for (let i = 1; i < accounts.length; i++) {
+        for (let i = 1; i < accounts.length-1; i++) {
             await campaigns[0].methods.contribute().send({
                 value: web3.utils.toWei("2", "ether"),
                 from: accounts[i]
@@ -90,6 +90,45 @@ describe("Campaigns", () => {
         } catch (err) {
             assert(err);
         }
+    });
+
+    it("Allows manager to make a payment request", async () => {
+        await campaigns[0].methods
+            .createRequest("Buy batteries", web3.utils.toWei("4", "ether"), accounts[5])
+            .send({
+                from: accounts[0],
+                gasLimit: "5000000"    
+            });
+        const request = await campaigns[0].methods.requests(0).call();
+
+        assert.equal("Buy batteries", request.description);
+    });
+
+    it("Processes requests", async () => {
+        await campaigns[0].methods.contribute().send({
+            from: accounts[0],
+            value: web3.utils.toWei("10", "ether")
+        });
+
+        await campaigns[0].methods
+            .createRequest("A", web3.utils.toWei("5", "ether"), accounts[9])
+            .send({ from: accounts[0], gasLimit: "1000000" 
+        });
+
+        await campaigns[0].methods.approveRequest(0).send({
+            from: accounts[0],
+            gasLimit: "1000000"
+        });
+        
+        await campaigns[0].methods.finaliseRequest(0).send({
+            from: accounts[0],
+            gasLimit: "1000000"
+        });
+
+        let balance = await web3.eth.getBalance(accounts[9]);
+        balance = web3.utils.fromWei(balance, 'ether');
+        balance = parseFloat(balance);
+        assert(balance > 104)
     });
 });
 
