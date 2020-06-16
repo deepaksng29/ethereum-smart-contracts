@@ -20,35 +20,76 @@ beforeEach(async () => {
 
     accounts = await web3.eth.getAccounts();
     
-    factory = await new web3.eth.Contract(JSON.parse(compiledFactory.abi))
-        .deploy({ data: compiledFactory.evm.bytecode.object })
-        .send({ from: accounts[0], gas: "1000000" });
+    factory = await new web3.eth.Contract(campaignFactoryContract.abi)
+        .deploy({ data: campaignFactoryContract.evm.bytecode.object })
+        .send({ from: accounts[0], gasLimit: "5000000" });
 
-    await factory.methods.createCampaign(web.utils.toWei("1", "ether")).send({
+    await factory.methods.createCampaign(web3.utils.toWei("1", "ether")).send({
         from: accounts[0],
-        gas: "1000000"
+        gasLimit: "5000000"
     });
 
-    await factory.methods.createCampaign(web.utils.toWei("0.5", "ether")).send({
+    await factory.methods.createCampaign(web3.utils.toWei("0.5", "ether")).send({
         from: accounts[1],
-        gas: "1000000"
+        gasLimit: "5000000"
     });
 
-    await factory.methods.createCampaign(web.utils.toWei("1.5", "ether")).send({
+    await factory.methods.createCampaign(web3.utils.toWei("1.5", "ether")).send({
         from: accounts[2],
-        gas: "1000000"
+        gasLimit: "5000000"
     });
 
-    await factory.methods.createCampaign(web.utils.toWei("5", "ether")).send({
+    await factory.methods.createCampaign(web3.utils.toWei("5", "ether")).send({
         from: accounts[3],
-        gas: "1000000"
+        gasLimit: "5000000"
     });
 
-    const deployedCampaigns = factory.methods.getDeployedCampaigns().call();
-
-    for (let campaign in deployedCampaigns) {
-        contract = await new web3.eth.Contract(JSON.parse(campaignContract.abi), campaign);
-        compaigns.push();
+    const deployedCampaigns = await factory.methods.getDeployedCampaigns().call();
+        
+    for (let i = 0; i < deployedCampaigns.length; i++) {
+        contract = await new web3.eth.Contract(campaignContract.abi, deployedCampaigns[i]);
+        campaigns.push(contract);
     }
+});
+
+describe("Campaigns", () => {
+    it("Deploys a factory contract", () => {
+        assert.ok(factory.options.address);
+    });
+
+    it("Deploys all campaigns", () => {
+        assert.ok(campaigns.length == 4);
+    });
+
+    it("Address for the manager are correctly set for each campaign", async () => {
+        for (let i = 0; i < campaigns.length; i++) {
+            const manager = await campaigns[i].methods.manager().call();
+            assert.equal(manager, accounts[i]);
+        }
+    });
+
+    it("Allows people to contribute money and marks them as contributors", async () => {
+        let areContributors = true;
+        for (let i = 1; i < accounts.length; i++) {
+            await campaigns[0].methods.contribute().send({
+                value: web3.utils.toWei("2", "ether"),
+                from: accounts[i]
+            });
+            areContributors = await campaigns[0].methods.approvers(accounts[i]).call();
+        }
+        assert(areContributors);
+    });
+
+    it("Requires a minimum contribution", async () => {
+        try {
+            await campaigns[0].methods.contribute().send({
+                value: web3.utils.toWei("0.2", "ether"),
+                from: accounts[1]
+            });
+            assert(false);
+        } catch (err) {
+            assert(err);
+        }
+    });
 });
 
