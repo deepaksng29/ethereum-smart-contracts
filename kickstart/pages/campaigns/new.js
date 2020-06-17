@@ -3,6 +3,7 @@ import factory from "../../ethereum/factory";
 import { Form, Button, Checkbox, Input, Message } from "semantic-ui-react";
 import Layout from "../../components/layout";
 import web3 from "../../ethereum/web3";
+import { Router } from "../../routes";
 
 class CampaignNew extends Component {
     state = {
@@ -25,6 +26,7 @@ class CampaignNew extends Component {
                 });
             
             this.setState({ loading: false });
+            Router.pushRoute("/");
         } catch (err) {
             this.setState({ errorMessage: err.message, loading: false });
         }
