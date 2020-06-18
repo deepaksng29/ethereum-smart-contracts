@@ -12,7 +12,6 @@ class ContributeForm extends Component {
     }
 
     onSubmit = async (event) => {
-        console.log("hello");
         event.preventDefault();
 
         this.setState({ loading: true, errorMessage: "" });
