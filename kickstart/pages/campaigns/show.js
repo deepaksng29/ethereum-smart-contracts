@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import Layout from "../../components/layout";
+import Campaign from "../../ethereum/campaign";
 
 class CampaignShow extends Component {
+    static async getInitialProps(props) {
+        const campaign = Campaign(props.query.address);
+        console.log(await campaign.methods.getSummary().call());
+        return {};
+    }
+
     render() {
         return(
             <Layout>

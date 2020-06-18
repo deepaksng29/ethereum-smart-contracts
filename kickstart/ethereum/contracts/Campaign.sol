@@ -109,4 +109,20 @@ contract Campaign {
     function getAddress() public view returns (address) {
         return address(this);
     }
+
+    /* ---- Returns a summary of data about the campaign ---- */
+    function getSummary() public view returns (uint, uint, uint, uint, address) {
+        return (
+            minimumContribution,
+            address(this).balance,
+            requests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    /* ---- Returns the number of funds requests ---- */
+    function getRequestsCount() public view returns (uint) {
+        return requests.length;
+    }
 }
