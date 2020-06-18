@@ -50,7 +50,7 @@ class CampaignNew extends Component {
                         content = { this.state.errorMessage }
                         icon = "attention"
                     />
-                    <Button loading = {this.state.loading } type = "Submit" primary>Create</Button>
+                    <Button loading = { this.state.loading } type = "Submit" primary>Create</Button>
                 </Form>
             </Layout>
         );
